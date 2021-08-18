@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Game.Models;
 
 namespace Game.ModelsView {
-  public class RegisterResultViewModel {
-    public IdentityResult Result { get; set; }
+  public class LoginResultViewModel {
+    public SignInResult Result { get; set; }
 
     public ApplicationUser User { get; set; }
 
-    public RegisterResultViewModel (IdentityResult result, ApplicationUser user) {
+    public LoginResultViewModel (SignInResult result, ApplicationUser user) {
       Result = result;
       User = new ApplicationUser () {
         Id = user.Id,

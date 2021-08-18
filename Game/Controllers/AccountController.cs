@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Game.Models;
 using Game.ModelsView;
@@ -42,7 +43,7 @@ namespace Game.Controllers
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login(LoginViewModel model)
+    public async Task<LoginResultViewModel> Login(LoginViewModel model)
     {
       Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(
         model.Username,
@@ -51,7 +52,10 @@ namespace Game.Controllers
         lockoutOnFailure: false
       );
 
-      return result.Succeeded ? RedirectToAction("Index", "Home") : View();
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
+      return new LoginResultViewModel(result, currentUser);
     }
 
     [HttpGet("logout")]

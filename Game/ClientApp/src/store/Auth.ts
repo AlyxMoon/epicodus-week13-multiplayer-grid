@@ -22,6 +22,13 @@ export interface User {
   playerColor: string;
 }
 
+export interface ApiLoginResponse {
+  result: {
+    succeeded: boolean;
+  };
+  user: User;
+}
+
 export interface ApiRegisterResponse {
   result: {
     succeeded: boolean;
@@ -65,13 +72,7 @@ interface UserSetErrorAction {
   errors: AuthError[];
 }
 
-// Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
-// declared type strings (and not any other arbitrary string).
 type KnownAction = UserRegisterAction | UserLoginAction | UserLogoutAction | UserSetUserAction | UserSetErrorAction;
-
-// ----------------
-// ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
-// They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
   register: (user : UserRegister): AppThunkAction < KnownAction > => async (dispatch, getState) => {
@@ -96,15 +97,29 @@ export const actionCreators = {
         user: data.user,
       })
     }
-
-    console.log('test result', data)
   },
-  login: (): AppThunkAction < KnownAction > => (dispatch, getState) => {},
+
+  login: (user: UserLogin): AppThunkAction <KnownAction> => async (dispatch, getState) => {
+    const response: Response = await fetch('account/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+
+    const data: ApiRegisterResponse = await response.json()
+
+    if (data.result.succeeded) {
+      dispatch({
+        type: 'SET_USER',
+        user: data.user,
+      })
+    }
+  },
+
   logout: (): AppThunkAction < KnownAction > => (dispatch, getState) => {},
 };
-
-// ----------------
-// REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
 const unloadedState: AuthState = {
   user: null,
@@ -123,7 +138,6 @@ export const reducer: Reducer<AuthState> = (state : AuthState | undefined, incom
         user: state.user,
       }
     case 'SET_USER':
-      console.log('sanity check!', action.user)
       return {
         errors: state.errors,
         user: action.user,

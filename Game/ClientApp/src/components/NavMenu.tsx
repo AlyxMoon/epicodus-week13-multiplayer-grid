@@ -1,11 +1,18 @@
 import * as React from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { ApplicationState } from '../store';
+import * as AuthStore from '../store/Auth';
+
 import './NavMenu.css';
 
-export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
+type Props = AuthStore.AuthState
+
+class NavMenu extends React.PureComponent<Props> {
   public state = {
-    isOpen: false
+    isOpen: false,
   };
 
   public render() {
@@ -24,10 +31,18 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                   <NavLink tag={Link} className="text-dark" to="/register">Register</NavLink>
                 </NavItem>
                 <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+                </NavItem>
+                <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
+                </NavItem>
+                <NavItem>
+                  {this.props.user && (
+                    <span>{this.props.user.userName}</span>
+                  )}
                 </NavItem>
               </ul>
             </Collapse>
@@ -39,7 +54,11 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
 
   private toggle = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
     });
   }
 }
+
+export default connect(
+  (state: ApplicationState) => state.auth,
+)(NavMenu as any);
