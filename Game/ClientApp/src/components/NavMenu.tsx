@@ -28,33 +28,40 @@ class NavMenu extends React.PureComponent<Props> {
                   <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/register">Register</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
-                </NavItem>
-                <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
                 </NavItem>
+
+                {!this.props.user && (
+                  <React.Fragment>
+                    <NavItem>
+                      <NavLink tag={Link} className="btn text-dark" to="/register">Register</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink tag={Link} className="btn text-dark" to="/login">Login</NavLink>
+                    </NavItem>
+                  </React.Fragment>
+                )}
+
                 {this.props.user && (
                   <React.Fragment>
                     <NavItem>
                       {this.props.user && (
-                        <span>{this.props.user.userName}</span>
+                        <span className="nav-text">
+                          {this.props.user.userName}
+                        </span>
                       )}
                     </NavItem>
                     <NavItem>
                       <button 
-                        className="btn btn-text"
+                        className="btn nav-link text-dark"
                         onClick={this.props.logout}
                       >Logout</button>
                     </NavItem>
                   </React.Fragment>
                 )}
-                
               </ul>
             </Collapse>
           </Container>
