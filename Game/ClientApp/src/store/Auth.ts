@@ -1,5 +1,5 @@
-import { Action, Reducer } from 'redux';
-import { AppThunkAction } from './';
+import {Action, Reducer} from 'redux';
+import {AppThunkAction} from './';
 
 export interface AuthState {
   user: User | null;
@@ -17,6 +17,7 @@ export interface User {
 }
 
 export interface UserRegister {
+  email: string;
   username: string;
   password: string;
 }
@@ -49,21 +50,33 @@ type KnownAction = UserRegisterAction | UserLoginAction | UserLogoutAction;
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-  register: (): AppThunkAction<KnownAction> => (dispatch, getState) => {},
-  login: (): AppThunkAction<KnownAction> => (dispatch, getState) => {},
-  logout: (): AppThunkAction<KnownAction> => (dispatch, getState) => {},
+  register: (user : UserRegister): AppThunkAction < KnownAction > => async (dispatch, getState) => {
+    const response: Response = await fetch('account/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+
+    const data = await response.json()
+  },
+  login: (): AppThunkAction < KnownAction > => (dispatch, getState) => {},
+  logout: (): AppThunkAction < KnownAction > => (dispatch, getState) => {},
 };
 
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: AuthState = { user: null, };
+const unloadedState: AuthState = {
+  user: null,
+};
 
-export const reducer: Reducer<AuthState> = (
-  state: AuthState | undefined, 
-  incomingAction: Action
-): AuthState => {
-  if (!state) return unloadedState;
+export const reducer: Reducer<AuthState> = (state : AuthState | undefined, incomingAction : Action) : AuthState => {
+  if (!state) 
+    return unloadedState;
+  
+
 
   const action = incomingAction as KnownAction;
 
@@ -82,6 +95,6 @@ export const reducer: Reducer<AuthState> = (
       positionY: 0,
       totalMoves: 0,
       playerColor: 'black',
-    }
+    },
   };
 };

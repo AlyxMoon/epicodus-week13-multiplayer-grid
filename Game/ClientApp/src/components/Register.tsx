@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
 
 import { ApplicationState } from '../store';
 import * as AuthStore from '../store/Auth';
 
-class Register extends React.PureComponent {
+type RegisterProps =
+  AuthStore.AuthState
+  & typeof AuthStore.actionCreators
+
+class Register extends React.PureComponent<RegisterProps> {
   public state = {
     username: '',
     email: '',
@@ -21,6 +24,7 @@ class Register extends React.PureComponent {
 
   private handleSubmit (event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault()
+    this.props.register(this.state)
   }
 
   public render() {
@@ -63,4 +67,4 @@ class Register extends React.PureComponent {
 export default connect(
   (state: ApplicationState) => state.auth,
   AuthStore.actionCreators,
-)(Register);
+)(Register as any);

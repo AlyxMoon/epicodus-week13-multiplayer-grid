@@ -1,8 +1,10 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Game.ModelsView {
-  public class RegisterViewModel {
+namespace Game.ModelsView
+{
+  public class RegisterViewModel
+  {
     [Required]
     [EmailAddress]
     [DisplayName("Email")]
@@ -16,10 +18,5 @@ namespace Game.ModelsView {
     [DataType(DataType.Password)]
     [DisplayName("Password")]
     public string Password { get; set; }
-
-    [DataType(DataType.Password)]
-    [DisplayName("Confirm password")]
-    [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-    public string ConfirmPassword { get; set; }
   }
 }
