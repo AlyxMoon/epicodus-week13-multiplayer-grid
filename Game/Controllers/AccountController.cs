@@ -28,16 +28,17 @@ namespace Game.Controllers
     }
 
     [HttpPost("register")]
-    public async Task<bool> Register(RegisterViewModel model)
+    public async Task<RegisterResultViewModel> Register(RegisterViewModel model)
     {
       ApplicationUser user = new()
       {
         Email = model.Email,
         UserName = model.Username
       };
+
       IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
-      return result.Succeeded;
+      return new RegisterResultViewModel (result, user);
     }
 
     [HttpPost("login")]

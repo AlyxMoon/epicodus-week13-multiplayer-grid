@@ -10,13 +10,13 @@ type RegisterProps =
 
 class Register extends React.PureComponent<RegisterProps> {
   public state = {
-    username: '',
+    userName: '',
     email: '',
     password: '',
   }
 
   private handleInputChange = (
-    name: string,
+    name: 'userName' | 'email' | 'password',
     event: React.FormEvent<HTMLInputElement>,
   ): void => {
     this.setState({ [name]: event.currentTarget.value })
@@ -37,8 +37,8 @@ class Register extends React.PureComponent<RegisterProps> {
           <input 
             type="text" 
             className="form-control"
-            value={this.state.username} 
-            onChange={event => this.handleInputChange('username', event)}
+            value={this.state.userName} 
+            onChange={event => this.handleInputChange('userName', event)}
           ></input>
 
           <label className="form-label">Email</label>
@@ -57,8 +57,23 @@ class Register extends React.PureComponent<RegisterProps> {
             onChange={event => this.handleInputChange('password', event)}
           ></input>
 
+          <div className="validation-container">
+            {this.props.errors.length}
+            <ul>
+              {this.props.errors.map(error => (
+                <li key={error.code}>
+                  {error.code}: {error.description}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <button className="mt-2 btn btn-primary">Submit</button>
         </form>
+
+        {this.props.user && (
+          <div>You have been logged in, yay! {this.props.user.userName}</div>
+        )}
       </React.Fragment>
     );
   }
