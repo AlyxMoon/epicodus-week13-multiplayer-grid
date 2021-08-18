@@ -8,7 +8,7 @@ import * as AuthStore from '../store/Auth';
 
 import './NavMenu.css';
 
-type Props = AuthStore.AuthState
+type Props = AuthStore.AuthState & typeof AuthStore.actionCreators
 
 class NavMenu extends React.PureComponent<Props> {
   public state = {
@@ -39,11 +39,22 @@ class NavMenu extends React.PureComponent<Props> {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
                 </NavItem>
-                <NavItem>
-                  {this.props.user && (
-                    <span>{this.props.user.userName}</span>
-                  )}
-                </NavItem>
+                {this.props.user && (
+                  <React.Fragment>
+                    <NavItem>
+                      {this.props.user && (
+                        <span>{this.props.user.userName}</span>
+                      )}
+                    </NavItem>
+                    <NavItem>
+                      <button 
+                        className="btn btn-text"
+                        onClick={this.props.logout}
+                      >Logout</button>
+                    </NavItem>
+                  </React.Fragment>
+                )}
+                
               </ul>
             </Collapse>
           </Container>
@@ -61,4 +72,5 @@ class NavMenu extends React.PureComponent<Props> {
 
 export default connect(
   (state: ApplicationState) => state.auth,
+  AuthStore.actionCreators,
 )(NavMenu as any);

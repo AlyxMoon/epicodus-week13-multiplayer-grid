@@ -59,10 +59,9 @@ namespace Game.Controllers
     }
 
     [HttpGet("logout")]
-    public async Task<ActionResult> Logout()
+    public async void Logout ()
     {
       await _signInManager.SignOutAsync();
-      return RedirectToAction("Index", "Home");
     }
   }
 }

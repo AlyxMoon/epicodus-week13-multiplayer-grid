@@ -67,12 +67,20 @@ interface UserSetUserAction {
   user: User;
 }
 
+interface UserClearUserAction {
+  type: 'CLEAR_USER';
+}
+
 interface UserSetErrorAction {
   type: 'SET_ERRORS';
   errors: AuthError[];
 }
 
-type KnownAction = UserRegisterAction | UserLoginAction | UserLogoutAction | UserSetUserAction | UserSetErrorAction;
+interface UserClearErrorsAction {
+  type: 'CLEAR_ERRORS';
+}
+
+type KnownAction = UserRegisterAction | UserLoginAction | UserLogoutAction | UserSetUserAction | UserSetErrorAction | UserClearUserAction | UserClearErrorsAction;
 
 export const actionCreators = {
   register: (user : UserRegister): AppThunkAction < KnownAction > => async (dispatch, getState) => {
@@ -118,7 +126,12 @@ export const actionCreators = {
     }
   },
 
-  logout: (): AppThunkAction < KnownAction > => (dispatch, getState) => {},
+  logout: (): AppThunkAction < KnownAction > => async (dispatch, getState) => {
+    await fetch('account/logout')
+
+    dispatch({ type: 'CLEAR_USER' })
+    dispatch({ type: 'CLEAR_ERRORS' })
+  },
 };
 
 const unloadedState: AuthState = {
@@ -142,9 +155,16 @@ export const reducer: Reducer<AuthState> = (state : AuthState | undefined, incom
         errors: state.errors,
         user: action.user,
       }
-    case 'REGISTER':
-    case 'LOGIN':
-    case 'LOGOUT':
+    case 'CLEAR_ERRORS':
+      return {
+        errors: [],
+        user: state.user,
+      }
+    case 'CLEAR_USER':
+      return {
+        errors: state.errors,
+        user: null,
+      }
   }
 
   return state;
