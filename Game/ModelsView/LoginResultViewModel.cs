@@ -8,9 +8,12 @@ namespace Game.ModelsView {
 
     public User User { get; set; }
 
-    public LoginResultViewModel (SignInResult result, ApplicationUser user) {
+    public string Token { get; set; }
+
+    public LoginResultViewModel (SignInResult result, ApplicationUser user, string token) {
       Result = result;
       User = new User(user);
+      Token = token;
     }
   }
 }
