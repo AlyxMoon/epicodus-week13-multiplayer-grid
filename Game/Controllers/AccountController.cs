@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Game.Models;
 using Game.ModelsView;
-using Game.Models.Database;
 
 namespace Game.Controllers
 {
@@ -13,19 +12,16 @@ namespace Game.Controllers
   [Route("[controller]")]
   public class AccountController : Controller
   {
-    private readonly DatabaseContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
     public AccountController(
-      UserManager<ApplicationUser> userManager,
-      SignInManager<ApplicationUser> signInManager,
-      DatabaseContext db
+      UserManager<ApplicationUser> userManager, 
+      SignInManager<ApplicationUser> signInManager
     )
     {
       _userManager = userManager;
       _signInManager = signInManager;
-      _db = db;
     }
 
     [HttpPost("register")]
