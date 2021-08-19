@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -8,6 +9,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Linq;
+using System.Net.Http.Headers;
 using Game.Models;
 using Game.ModelsView;
 
@@ -33,9 +36,26 @@ namespace Game.Controllers
       _configuration = configuration;
     }
 
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<UserViewModel> GetAuthenticatedUser ([FromHeader] string authorization) {
+
+      if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue)) {
+        string parameter = headerValue.Parameter;
+        JwtSecurityTokenHandler handler = new();
+        JwtSecurityToken token = handler.ReadJwtToken(parameter);
+
+        string username = token.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name).Value;
+
+        ApplicationUser user = await _userManager.FindByNameAsync(username);
+        return new UserViewModel(user);
+      }
+
+      return new UserViewModel();
+    }
+
     [HttpPost("register")]
-    public async Task<RegisterResultViewModel> Register(RegisterViewModel model)
-    {
+    public async Task<RegisterResultViewModel> Register(RegisterViewModel model) {
       ApplicationUser user = new()
       {
         Email = model.Email,
@@ -67,7 +87,7 @@ namespace Game.Controllers
       SymmetricSecurityKey authSigningKey = new(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
       JwtSecurityToken token = new(   
-        expires: DateTime.Now.AddDays(14),
+        expires: DateTime.Now.AddSeconds(2),
         claims: authClaims,
         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)  
         );

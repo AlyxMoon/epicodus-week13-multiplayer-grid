@@ -28,19 +28,19 @@ namespace Game.Controllers
     }
 
     [HttpGet]
-    public List<User> Find () {
-      return _userManager.Users.Select(user => new User(user)).ToList();
+    public List<UserViewModel> Find () {
+      return _userManager.Users.Select(user => new UserViewModel(user)).ToList();
     }
 
     [HttpPut("{id}/position")]
-    public async Task<User> UpdatePositions (string id, UserPositionViewModel positions) {
+    public async Task<UserViewModel> UpdatePositions (string id, UserPositionViewModel positions) {
       ApplicationUser user = await _userManager.FindByIdAsync(id);
 
       user.PositionX = positions.PositionX;
       user.PositionY = positions.PositionY;
 
       await _userManager.UpdateAsync(user);
-      return new User(user);
+      return new UserViewModel(user);
     }
   }
 }

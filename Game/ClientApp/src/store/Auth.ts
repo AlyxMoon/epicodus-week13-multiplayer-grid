@@ -27,6 +27,7 @@ export interface ApiLoginResponse {
     succeeded: boolean,
   },
   user: User,
+  token: string,
 }
 
 export interface ApiRegisterResponse {
@@ -123,21 +124,25 @@ export const actionCreators = {
       body: JSON.stringify(user),
     })
 
-    const data: ApiRegisterResponse = await response.json()
+    const data: ApiLoginResponse = await response.json()
 
     if (data.result.succeeded) {
       dispatch({
         type: 'SET_USER',
         user: data.user,
       })
+
+      localStorage.setItem('token', data.token)
     }
   },
 
-  logout: (): AppThunkAction < KnownAction > => async (dispatch, getState) => {
+  logout: (): AppThunkAction <KnownAction> => async (dispatch, getState) => {
     await fetch('account/logout')
 
     dispatch({ type: 'CLEAR_USER' })
     dispatch({ type: 'CLEAR_ERRORS' })
+
+    localStorage.removeItem('token')
   },
 }
 

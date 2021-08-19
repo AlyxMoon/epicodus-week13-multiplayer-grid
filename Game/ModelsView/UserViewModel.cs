@@ -1,7 +1,7 @@
 using Game.Models;
 
 namespace Game.ModelsView {
-  public class User {
+  public class UserViewModel {
     public string Id { get; set; }
     public string UserName { get; set; }
     public string Email { get; set; }
@@ -11,7 +11,9 @@ namespace Game.ModelsView {
     public int TotalMoves { get; set; }
     public string PlayerColor { get; set; }
  
-    public User (ApplicationUser user) {
+    public UserViewModel () {}
+
+    public UserViewModel (ApplicationUser user) {
       Id = user.Id;
       UserName = user.UserName;
       Email = user.Email;

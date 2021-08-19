@@ -6,11 +6,11 @@ namespace Game.ModelsView {
   public class RegisterResultViewModel {
     public IdentityResult Result { get; set; }
 
-    public User User { get; set; }
+    public UserViewModel User { get; set; }
 
     public RegisterResultViewModel (IdentityResult result, ApplicationUser user) {
       Result = result;
-      User = new User(user);
+      User = new UserViewModel(user);
     }
   }
 }

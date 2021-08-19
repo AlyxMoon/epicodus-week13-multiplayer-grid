@@ -16,12 +16,28 @@ const history = createBrowserHistory({ basename: baseUrl })
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const store = configureStore(history)
 
+const token = localStorage.getItem('token')
+if (token) {
+  fetch('account', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    store.dispatch({
+      type: 'SET_USER',
+      user: data,
+    })
+  })
+}
+
 ReactDOM.render(
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <App />
-        </ConnectedRouter>
-    </Provider>,
-    document.getElementById('root'))
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('root'))
 
 registerServiceWorker()
