@@ -1,86 +1,93 @@
-import {Action, Reducer} from 'redux';
-import {AppThunkAction} from './';
+import {Action, Reducer} from 'redux'
+import {AppThunkAction} from './'
 
 export interface AuthState {
-  user: User | null;
-  errors: AuthError[];
+  user: User | null,
+  errors: AuthError[],
 }
 
 export interface AuthError {
-  code: string;
-  description: string;
+  code: string,
+  description: string,
 }
 
 export interface User {
-  id: string;
-  email: string;
-  userName: string;
-  password?: string;
-  positionX: number;
-  positionY: number;
-  totalMoves: number;
-  playerColor: string;
+  id: string,
+  email: string,
+  userName: string,
+  password?: string,
+  positionX: number,
+  positionY: number,
+  totalMoves: number,
+  playerColor: string,
 }
 
 export interface ApiLoginResponse {
   result: {
-    succeeded: boolean;
-  };
-  user: User;
+    succeeded: boolean,
+  },
+  user: User,
 }
 
 export interface ApiRegisterResponse {
   result: {
-    succeeded: boolean;
-    errors: AuthError[];
-  };
-  user: User;
+    succeeded: boolean,
+    errors: AuthError[],
+  },
+  user: User,
 }
 
 export interface UserRegister {
-  email: string;
-  userName: string;
-  password: string;
+  email: string,
+  userName: string,
+  password: string,
 }
 
 export interface UserLogin {
-  userName: string;
-  password: string;
+  userName: string,
+  password: string,
 }
 
 interface UserRegisterAction {
-  type: 'REGISTER';
-  data: UserRegister;
+  type: 'REGISTER',
+  data: UserRegister,
 }
 
 interface UserLoginAction {
-  type: 'LOGIN';
-  data: UserLogin;
+  type: 'LOGIN',
+  data: UserLogin,
 }
 
 interface UserLogoutAction {
-  type: 'LOGOUT';
+  type: 'LOGOUT',
 }
 
 interface UserSetUserAction {
-  type: 'SET_USER';
-  user: User;
+  type: 'SET_USER',
+  user: User,
 }
 
 interface UserClearUserAction {
-  type: 'CLEAR_USER';
+  type: 'CLEAR_USER',
 }
 
 interface UserSetErrorAction {
-  type: 'SET_ERRORS';
-  errors: AuthError[];
+  type: 'SET_ERRORS',
+  errors: AuthError[],
 }
 
 interface UserClearErrorsAction {
-  type: 'CLEAR_ERRORS';
+  type: 'CLEAR_ERRORS',
 }
 
-type KnownAction = UserRegisterAction | UserLoginAction | UserLogoutAction | UserSetUserAction | UserSetErrorAction | UserClearUserAction | UserClearErrorsAction;
+type KnownAction = 
+  UserRegisterAction | 
+  UserLoginAction | 
+  UserLogoutAction | 
+  UserSetUserAction | 
+  UserSetErrorAction | 
+  UserClearUserAction | 
+  UserClearErrorsAction
 
 export const actionCreators = {
   register: (user : UserRegister): AppThunkAction < KnownAction > => async (dispatch, getState) => {
@@ -132,17 +139,17 @@ export const actionCreators = {
     dispatch({ type: 'CLEAR_USER' })
     dispatch({ type: 'CLEAR_ERRORS' })
   },
-};
+}
 
 const unloadedState: AuthState = {
   user: null,
   errors: [],
-};
+}
 
 export const reducer: Reducer<AuthState> = (state : AuthState | undefined, incomingAction : Action) : AuthState => {
-  if (!state) return unloadedState;
+  if (!state) return unloadedState
 
-  const action = incomingAction as KnownAction;
+  const action = incomingAction as KnownAction
 
   switch (action.type) {
     case 'SET_ERRORS':
@@ -167,5 +174,5 @@ export const reducer: Reducer<AuthState> = (state : AuthState | undefined, incom
       }
   }
 
-  return state;
-};
+  return state
+}

@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
-import { Link } from 'react-router-dom';
-import { ApplicationState } from '../store';
-import * as WeatherForecastsStore from '../store/WeatherForecasts';
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { RouteComponentProps } from 'react-router'
+import { Link } from 'react-router-dom'
+import { ApplicationState } from '../store'
+import * as WeatherForecastsStore from '../store/WeatherForecasts'
 
 // At runtime, Redux will merge together...
 type WeatherForecastProps =
@@ -15,12 +15,12 @@ type WeatherForecastProps =
 class FetchData extends React.PureComponent<WeatherForecastProps> {
   // This method is called when the component is first added to the document
   public componentDidMount() {
-    this.ensureDataFetched();
+    this.ensureDataFetched()
   }
 
   // This method is called when the route parameters change
   public componentDidUpdate() {
-    this.ensureDataFetched();
+    this.ensureDataFetched()
   }
 
   public render() {
@@ -31,12 +31,12 @@ class FetchData extends React.PureComponent<WeatherForecastProps> {
         {this.renderForecastsTable()}
         {this.renderPagination()}
       </React.Fragment>
-    );
+    )
   }
 
   private ensureDataFetched() {
-    const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
-    this.props.requestWeatherForecasts(startDateIndex);
+    const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0
+    this.props.requestWeatherForecasts(startDateIndex)
   }
 
   private renderForecastsTable() {
@@ -61,12 +61,12 @@ class FetchData extends React.PureComponent<WeatherForecastProps> {
           )}
         </tbody>
       </table>
-    );
+    )
   }
 
   private renderPagination() {
-    const prevStartDateIndex = (this.props.startDateIndex || 0) - 5;
-    const nextStartDateIndex = (this.props.startDateIndex || 0) + 5;
+    const prevStartDateIndex = (this.props.startDateIndex || 0) - 5
+    const nextStartDateIndex = (this.props.startDateIndex || 0) + 5
 
     return (
       <div className="d-flex justify-content-between">
@@ -74,11 +74,11 @@ class FetchData extends React.PureComponent<WeatherForecastProps> {
         {this.props.isLoading && <span>Loading...</span>}
         <Link className='btn btn-outline-secondary btn-sm' to={`/fetch-data/${nextStartDateIndex}`}>Next</Link>
       </div>
-    );
+    )
   }
 }
 
 export default connect(
   (state: ApplicationState) => state.weatherForecasts, // Selects which state properties are merged into the component's props
   WeatherForecastsStore.actionCreators // Selects which action creators are merged into the component's props
-)(FetchData as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+)(FetchData as any) // eslint-disable-line @typescript-eslint/no-explicit-any

@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { Route } from 'react-router';
-import Layout from './components/Layout';
-import Home from './components/Home';
-import Counter from './components/Counter';
-import FetchData from './components/FetchData';
-import Register from './components/Register';
-import Login from './components/Login';
+import * as React from 'react'
+import { Route } from 'react-router'
+import Layout from './components/Layout'
+import Home from './components/Home'
+import Counter from './components/Counter'
+import FetchData from './components/FetchData'
+import Register from './components/Register'
+import Login from './components/Login'
 
 import './custom.css'
 
@@ -17,4 +17,4 @@ export default () => (
         <Route path='/login' component={Login} />
         <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
     </Layout>
-);
+)

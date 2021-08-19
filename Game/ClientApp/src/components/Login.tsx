@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
+import * as React from 'react'
+import { connect } from 'react-redux'
 
-import { ApplicationState } from '../store';
-import * as AuthStore from '../store/Auth';
+import { ApplicationState } from '../store'
+import * as AuthStore from '../store/Auth'
 
 type LoginProps =
   AuthStore.AuthState
@@ -55,11 +55,11 @@ class Register extends React.PureComponent<LoginProps> {
           <div>You have been logged in, yay! {this.props.user.userName}</div>
         )}
       </React.Fragment>
-    );
+    )
   }
 };
 
 export default connect(
   (state: ApplicationState) => state.auth,
   AuthStore.actionCreators,
-)(Register as any);
+)(Register as any)

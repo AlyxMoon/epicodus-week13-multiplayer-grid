@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import * as React from 'react'
+import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-import { ApplicationState } from '../store';
-import * as AuthStore from '../store/Auth';
+import { ApplicationState } from '../store'
+import * as AuthStore from '../store/Auth'
 
-import './NavMenu.css';
+import './NavMenu.css'
 
 type Props = AuthStore.AuthState & typeof AuthStore.actionCreators
 
@@ -67,17 +67,17 @@ class NavMenu extends React.PureComponent<Props> {
           </Container>
         </Navbar>
       </header>
-    );
+    )
   }
 
   private toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
-    });
+    })
   }
 }
 
 export default connect(
   (state: ApplicationState) => state.auth,
   AuthStore.actionCreators,
-)(NavMenu as any);
+)(NavMenu as any)
