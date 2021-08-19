@@ -50,10 +50,6 @@ namespace Game.Controllers
     [HttpPost("login")]
     public async Task<LoginResultViewModel> Login(LoginViewModel model)
     {
-      // System.Console.WriteLine("TESTTTTTT -----------");
-      // System.Console.WriteLine(model.Username);
-      // System.Console.WriteLine(model.Password);
-
       Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(
         model.Username,
         model.Password,
@@ -70,10 +66,8 @@ namespace Game.Controllers
 
       SymmetricSecurityKey authSigningKey = new(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
-      JwtSecurityToken token = new(  
-        // issuer: _configuration["JWT:ValidIssuer"],  
-        // audience: _configuration["JWT:ValidAudience"],  
-        expires: DateTime.Now.AddHours(3),
+      JwtSecurityToken token = new(   
+        expires: DateTime.Now.AddDays(14),
         claims: authClaims,
         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)  
         );

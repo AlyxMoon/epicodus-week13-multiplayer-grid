@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 using Game.Models;
 using Game.Models.Database;
@@ -40,6 +43,22 @@ namespace Game
         .AddIdentity<ApplicationUser, IdentityRole>()
         .AddEntityFrameworkStores<DatabaseContext>()
         .AddDefaultTokenProviders();
+
+      services
+        .AddAuthentication(options =>  {  
+          options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
+          options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
+          options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
+        })
+        .AddJwtBearer(options => {  
+            options.SaveToken = true;  
+            options.RequireHttpsMetadata = false;  
+            options.TokenValidationParameters = new TokenValidationParameters () {  
+              ValidateIssuer = false,  
+              ValidateAudience = false,   
+              IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
+            };  
+        });  
 
       services.Configure<IdentityOptions>(options =>
       {
